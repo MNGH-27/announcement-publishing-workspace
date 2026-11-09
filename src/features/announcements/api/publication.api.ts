@@ -1,9 +1,8 @@
-import { notifyRejectedOperations } from '../utils/publicationToast.utils'
 
 import { announcementService } from '../../../core/api/announcementService'
 import { useAnnouncementStore } from '../../../core/store/useAnnouncementStore'
 
-import { createRequestDeduplicator, resolvePublicationOperationId } from '../utils'
+import { createRequestDeduplicator, notifyRejectedOperations, resolvePublicationOperationId } from '../utils'
 
 const deduplicateRefresh = createRequestDeduplicator<string, void>()
 export function refreshOperations(): Promise<void> {

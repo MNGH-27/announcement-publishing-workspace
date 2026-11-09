@@ -1,3 +1,4 @@
+import { toast } from 'sonner'
 import type { PublicationOperation } from '../../../mocks'
 
 /** Null means the announcement already has a confirmed successful publication. */
@@ -27,5 +28,26 @@ export function createRequestDeduplicator<Key, Value>() {
       .finally(() => requests.delete(key))
     requests.set(key, promise)
     return promise
+  }
+}
+
+
+export function notifyRejectedOperations(
+  incoming: readonly PublicationOperation[],
+  previous: readonly PublicationOperation[],
+) {
+  for (const operation of incoming) {
+    if (operation.status !== 'rejected') continue
+    if (
+      previous.some(
+        (item) => item.operationId === operation.operationId && item.status === 'rejected',
+      )
+    )
+      continue
+    toast.error('Publication rejected', {
+      id: `rejected:${operation.operationId}`,
+      description: operation.reason,
+      duration: 6000,
+    })
   }
 }
