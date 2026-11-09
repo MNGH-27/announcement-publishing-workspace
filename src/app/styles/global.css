@@ -1,4 +1,6 @@
 @import 'tailwindcss';
+@import 'swiper/css';
+@import 'swiper/css/pagination';
 @theme {
   --color-brand-50: #eef2ff;
   --color-brand-100: #e0e7ff;
