@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react'
 import { A11y, Autoplay, Keyboard, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import type { AnnouncementSummaryCounts } from '../model/summary'
+
+
 import { Card } from '../../../shared/ui'
 
 const tones = {
@@ -9,6 +10,13 @@ const tones = {
   warning: 'bg-amber-50 text-amber-700',
   success: 'bg-emerald-50 text-emerald-600',
 }
+
+export interface AnnouncementSummaryCountsType {
+  total: number
+  ready: number
+  published: number
+}
+
 
 interface IAnnouncementSummaryCardProps {
   title: string
@@ -41,7 +49,7 @@ export function AnnouncementSummaryCard({
   )
 }
 
-export function AnnouncementSummary({ total, ready, published }: AnnouncementSummaryCounts) {
+export function AnnouncementSummary({ total, ready, published }: AnnouncementSummaryCountsType) {
   const items = [
     { title: 'Total announcements', value: total, icon: '▤', tone: 'brand' as const },
     { title: 'Ready to publish', value: ready, icon: '◷', tone: 'warning' as const },

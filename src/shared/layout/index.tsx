@@ -64,7 +64,7 @@ export function Sidebar({
   )
 }
 
-export function Header({ onOpenMenu }: { onOpenMenu: () => void }) {
+export function Header({ onOpenMenu, actions }: { onOpenMenu: () => void; actions?: ReactNode }) {
   return (
     <header className="flex h-16 shrink-0 items-center justify-between gap-3 border-b border-slate-200 bg-surface px-3 text-xs text-muted sm:px-6 lg:px-8">
       <div className="flex min-w-0 items-center gap-2">
@@ -85,13 +85,16 @@ export function Header({ onOpenMenu }: { onOpenMenu: () => void }) {
           <strong className="font-medium text-slate-700">Announcements</strong>
         </span>
       </div>
-      <span className="hidden items-center gap-2 sm:flex">
-        <span className="size-1.5 rounded-full bg-emerald-600" />
-        Team workspace
-      </span>
-      <span className="grid size-8 place-items-center rounded-full bg-brand-50 font-semibold text-brand-600 sm:hidden">
-        CT
-      </span>
+      <div className="ml-auto flex min-w-0 items-center gap-3">
+        {actions}
+        <span className="hidden items-center gap-2 lg:flex">
+          <span className="size-1.5 rounded-full bg-emerald-600" />
+          Team workspace
+        </span>
+        <span className="grid size-8 place-items-center rounded-full bg-brand-50 font-semibold text-brand-600 hidden">
+          CT
+        </span>
+      </div>
     </header>
   )
 }

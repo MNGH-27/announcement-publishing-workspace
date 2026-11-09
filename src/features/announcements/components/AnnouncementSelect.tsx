@@ -1,6 +1,11 @@
-import type { FC } from "react"
-import { Card, EmptyState, Input } from "../../../shared/ui"
-import type { IAnnouncement } from "../../../mocks"
+import { AnnouncementStatusBadge } from './AnnouncementStatusBadge'
+import type { FC } from 'react'
+
+import { Card, EmptyState, Input } from '../../../shared/ui'
+import type { IAnnouncement } from '../../../mocks'
+
+import { useAnnouncementStore } from '../../../core/store/useAnnouncementStore'
+import { getAnnouncementStatus } from '../utils'
 
 interface IAnnouncementSelectProps {
   selected: string | undefined
@@ -10,7 +15,15 @@ interface IAnnouncementSelectProps {
   filtered: IAnnouncement[]
 }
 
-export const AnnouncementSelect:FC<IAnnouncementSelectProps> = ({ selected, setSelected, query, setQuery, filtered }) => {
+export const AnnouncementSelect: FC<IAnnouncementSelectProps> = ({
+  selected,
+  setSelected,
+  query,
+  setQuery,
+  filtered,
+}) => {
+  const operations = useAnnouncementStore((state) => state.operations)
+  const pending = useAnnouncementStore((state) => state.pending)
   return (
     <Card className="max-lg:hidden col-span-2 flex min-h-0 flex-col overflow-hidden max-lg:col-span-1 !h-fit">
       <div className="flex shrink-0 items-center gap-2 px-4 py-4 text-sm">
@@ -39,7 +52,12 @@ export const AnnouncementSelect:FC<IAnnouncementSelectProps> = ({ selected, setS
             >
               <span className="flex flex-col gap-1.5 [&_strong]:text-xs [&_strong]:font-semibold [&_strong]:leading-snug">
                 <strong>{item.title}</strong>
-                <span className="text-xs text-slate-500">Not submitted · {item.id}</span>
+                <span className="flex flex-wrap items-center gap-2">
+                  <AnnouncementStatusBadge
+                    status={getAnnouncementStatus(operations, pending, item.id)}
+                  />
+                  <span className="text-xs text-muted">{item.id}</span>
+                </span>
               </span>
               <span className="ml-auto text-slate-500" aria-hidden="true">
                 ›

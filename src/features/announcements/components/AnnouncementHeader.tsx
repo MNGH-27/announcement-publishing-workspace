@@ -1,5 +1,6 @@
-import type { FC } from "react"
-import type { IAnnouncement } from "../../../mocks"
+import type { FC } from 'react'
+import type { IAnnouncement } from '../../../mocks'
+import { ScenarioSelect } from './ScenarioSelect'
 
 interface IAnnouncementHeaderProps {
   selected: string | undefined
@@ -7,10 +8,14 @@ interface IAnnouncementHeaderProps {
   announcementList: IAnnouncement[]
 }
 
-export const AnnouncementHeader:FC<IAnnouncementHeaderProps> = ({ selected, setSelected, announcementList }) => {
+export const AnnouncementHeader: FC<IAnnouncementHeaderProps> = ({
+  selected,
+  setSelected,
+  announcementList,
+}) => {
   return (
     <>
-      <div className="mb-4 flex shrink-0 items-start justify-between gap-3">
+      <div className="mb-4 flex shrink-0 flex-col items-start justify-between gap-4 md:flex-row">
         <div>
           <p className="hidden text-xs font-semibold tracking-wider text-muted sm:block">
             YOUR COMMUNICATIONS, IN ONE PLACE
@@ -22,6 +27,7 @@ export const AnnouncementHeader:FC<IAnnouncementHeaderProps> = ({ selected, setS
             Prepared content. Clear updates. Ready when you are.
           </p>
         </div>
+        <ScenarioSelect />
       </div>
       <div className="mb-3 shrink-0 lg:hidden">
         <label htmlFor="selected-announcement" className="sr-only">
