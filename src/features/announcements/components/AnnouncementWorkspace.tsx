@@ -15,22 +15,24 @@ import { AnnouncementSummary } from './AnnouncementSummary'
 import { refreshOperations } from '../api'
 
 export function AnnouncementWorkspace() {
-  const [query, setQuery] = useState('')
+  const [operationsError, setOperationsError] = useState('')
 
   const { selected, announcementList, operations, pending, setSelected, setAnnouncementList } =
     useAnnouncementStore()
 
   const { isLoading, isError, error, setIsLoading, setError, clearError } = useFeedback()
 
-  const [operationsError, setOperationsError] = useState('')
   const restored = useRef(false)
   const checking = useRef(false)
 
   const refreshStatus = useCallback(async () => {
+    //check if there is ongoing request
     if (checking.current) return
     checking.current = true
+
     try {
       await refreshOperations()
+
       restored.current = true
       setOperationsError('')
     } catch {
@@ -54,12 +56,14 @@ export function AnnouncementWorkspace() {
     }
   }, [setIsLoading, clearError, setError, setAnnouncementList])
 
+  //Loading data of announcements
   useEffect(() => {
-    queueMicrotask(() => void fetchDataHandler())
+    fetchDataHandler()
   }, [fetchDataHandler])
 
+  //loading data of operations with interval - 1500ms
   useEffect(() => {
-    queueMicrotask(() => void refreshStatus())
+    refreshStatus()
     const timer = window.setInterval(() => {
       const { operations, pending } = useAnnouncementStore.getState()
       if (
@@ -67,7 +71,7 @@ export function AnnouncementWorkspace() {
         Object.keys(pending).length ||
         operations.some((item) => item.status === 'processing')
       ) {
-        queueMicrotask(() => void refreshStatus())
+        refreshStatus()
       }
     }, 1500)
     return () => window.clearInterval(timer)
@@ -76,9 +80,6 @@ export function AnnouncementWorkspace() {
   const summary = getAnnouncementSummary(announcementList, operations, pending)
 
   const announcement = announcementList.find((item) => item.id === selected)
-  const filtered = announcementList.filter((item) =>
-    item.title.toLowerCase().includes(query.toLowerCase()),
-  )
 
   if (isLoading && !announcementList.length) return <LoadingState />
   if (isError) return <ErrorState message={error?.message} onRetry={fetchDataHandler} />
@@ -97,6 +98,7 @@ export function AnnouncementWorkspace() {
           Reset publications
         </Button>
       </div>
+
       {operationsError && (
         <div className="mb-4">
           <ErrorState message={operationsError} onRetry={refreshStatus} />
@@ -112,13 +114,7 @@ export function AnnouncementWorkspace() {
       <AnnouncementSummary {...summary} />
 
       <div className="grid grid-cols-5 items-stretch gap-4 max-lg:grid-cols-1">
-        <AnnouncementSelect
-          selected={selected}
-          setSelected={setSelected}
-          query={query}
-          setQuery={setQuery}
-          filtered={filtered}
-        />
+        <AnnouncementSelect />
         <AnnouncementDetail key={announcement?.id} announcement={announcement} />
       </div>
 

@@ -1,8 +1,8 @@
-import type { IAnnouncement, PublicationOperation } from "../../../mocks"
-import type { AnnouncementSummaryCountsType } from "../components/AnnouncementSummary"
+import type { IAnnouncement, PublicationOperation } from '../../../mocks'
+import type { IAnnouncementSummaryCountsProps } from '../components/AnnouncementSummary'
 
 /** Returns the newest attempt without changing the source array.
- * For equal timestamps, the later array entry wins; duplicate snapshots
+ * For equal timestamps the later array entry wins duplicate snapshots
  * of the same operation prefer the higher version.
  */
 export function findAnnouncementOperation(
@@ -10,16 +10,20 @@ export function findAnnouncementOperation(
   announcementId: string | undefined,
 ): PublicationOperation | undefined {
   if (!announcementId) return undefined
+
   return operations.reduce<PublicationOperation | undefined>((latest, operation) => {
     if (operation.announcementId !== announcementId) return latest
+
     if (!latest) return operation
+
     if (operation.operationId === latest.operationId) {
       return operation.version >= latest.version ? operation : latest
     }
+
     return Date.parse(operation.createdAt) >= Date.parse(latest.createdAt) ? operation : latest
   }, undefined)
-}
 
+}
 
 export function getAnnouncementStatus(
   operations: readonly PublicationOperation[],
@@ -27,8 +31,11 @@ export function getAnnouncementStatus(
   announcementId: string | undefined,
 ) {
   const latest = findAnnouncementOperation(operations, announcementId)
+
   const pendingId = announcementId ? pending[announcementId] : undefined
+
   if (pendingId && pendingId !== latest?.operationId) return 'pending'
+
   return latest?.status ?? (pendingId ? 'pending' : 'Not submitted')
 }
 
@@ -37,7 +44,7 @@ export function getAnnouncementSummary(
   announcements: readonly IAnnouncement[],
   operations: readonly PublicationOperation[],
   pending: Readonly<Record<string, string>> = {},
-): AnnouncementSummaryCountsType {
+): IAnnouncementSummaryCountsProps {
   const published = new Set<string>()
   const processing = new Set<string>()
   // Prefer newer snapshots when an operation appears more than once.

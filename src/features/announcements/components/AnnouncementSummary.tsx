@@ -5,51 +5,13 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 
 import { Card } from '../../../shared/ui'
 
-const tones = {
-  brand: 'bg-brand-50 text-brand-500',
-  warning: 'bg-amber-50 text-amber-700',
-  success: 'bg-emerald-50 text-emerald-600',
-}
-
-export interface AnnouncementSummaryCountsType {
+export interface IAnnouncementSummaryCountsProps {
   total: number
   ready: number
   published: number
 }
 
-
-interface IAnnouncementSummaryCardProps {
-  title: string
-  value: number
-  icon: ReactNode
-  tone: 'brand' | 'warning' | 'success'
-}
-
-export function AnnouncementSummaryCard({
-  title,
-  value,
-  icon,
-  tone,
-}: IAnnouncementSummaryCardProps) {
-  return (
-    <Card className="flex min-h-28 items-center gap-3 p-4 xl:gap-4 xl:p-5">
-      <span
-        aria-hidden="true"
-        className={`grid size-10 shrink-0 place-items-center rounded-xl text-xl ${tones[tone]}`}
-      >
-        {icon}
-      </span>
-      <div className="min-w-0">
-        <p className="text-xs leading-relaxed text-muted xl:text-sm">{title}</p>
-        <strong className="mt-1 block text-2xl xl:text-3xl font-semibold tabular-nums text-ink">
-          {String(value).padStart(2, '0')}
-        </strong>
-      </div>
-    </Card>
-  )
-}
-
-export function AnnouncementSummary({ total, ready, published }: AnnouncementSummaryCountsType) {
+export function AnnouncementSummary({ total, ready, published }: IAnnouncementSummaryCountsProps) {
   const items = [
     { title: 'Total announcements', value: total, icon: '▤', tone: 'brand' as const },
     { title: 'Ready to publish', value: ready, icon: '◷', tone: 'warning' as const },
@@ -91,5 +53,43 @@ export function AnnouncementSummary({ total, ready, published }: AnnouncementSum
         ))}
       </Swiper>
     </section>
+  )
+}
+
+
+interface IAnnouncementSummaryCardProps {
+  title: string
+  value: number
+  icon: ReactNode
+  tone: 'brand' | 'warning' | 'success'
+}
+
+const tones = {
+  brand: 'bg-brand-50 text-brand-500',
+  warning: 'bg-amber-50 text-amber-700',
+  success: 'bg-emerald-50 text-emerald-600',
+}
+
+export function AnnouncementSummaryCard({
+  title,
+  value,
+  icon,
+  tone,
+}: IAnnouncementSummaryCardProps) {
+  return (
+    <Card className="flex min-h-28 items-center gap-3 p-4 xl:gap-4 xl:p-5">
+      <span
+        aria-hidden="true"
+        className={`grid size-10 shrink-0 place-items-center rounded-xl text-xl ${tones[tone]}`}
+      >
+        {icon}
+      </span>
+      <div className="min-w-0">
+        <p className="text-xs leading-relaxed text-muted xl:text-sm">{title}</p>
+        <strong className="mt-1 block text-2xl xl:text-3xl font-semibold tabular-nums text-ink">
+          {String(value).padStart(2, '0')}
+        </strong>
+      </div>
+    </Card>
   )
 }

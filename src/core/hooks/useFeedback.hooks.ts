@@ -12,6 +12,7 @@ export function useFeedback() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setErrorState] = useState<FeedbackError | null>(null)
   const [errors, setErrors] = useState<FeedbackError[]>([])
+
   const setError = useCallback((cause: unknown) => {
     const feedback = {
       message:
@@ -27,7 +28,9 @@ export function useFeedback() {
     setErrorState(feedback)
     setErrors((previous) => [...previous.slice(-49), feedback])
   }, [])
+
   const clearError = useCallback(() => setErrorState(null), [])
+
   const reset = useCallback(() => {
     setIsLoading(false)
     setErrorState(null)

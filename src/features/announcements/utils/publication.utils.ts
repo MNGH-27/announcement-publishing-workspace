@@ -8,8 +8,11 @@ export function resolvePublicationOperationId(
   announcementId: string,
   createId: () => string = () => crypto.randomUUID(),
 ): string | null {
+
   const history = operations.filter((operation) => operation.announcementId === announcementId)
+
   if (history.some((operation) => operation.status === 'published')) return null
+
   return (
     pending[announcementId] ??
     history.find((operation) => operation.status === 'processing')?.operationId ??

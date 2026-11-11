@@ -1,31 +1,23 @@
-import { AnnouncementStatusBadge } from './AnnouncementStatusBadge'
-import type { FC } from 'react'
+import { useState, type FC } from 'react'
 
-import { Card, EmptyState, Input } from '../../../shared/ui'
-import type { IAnnouncement } from '../../../mocks'
+import { Badge, Card, EmptyState, Input } from '../../../shared/ui'
 
 import { useAnnouncementStore } from '../../../core/store/useAnnouncementStore'
 import { getAnnouncementStatus } from '../utils'
 
-interface IAnnouncementSelectProps {
-  selected: string | undefined
-  setSelected: (value: string) => void
-  query: string
-  setQuery: (value: string) => void
-  filtered: IAnnouncement[]
-}
 
-export const AnnouncementSelect: FC<IAnnouncementSelectProps> = ({
-  selected,
-  setSelected,
-  query,
-  setQuery,
-  filtered,
-}) => {
-  const operations = useAnnouncementStore((state) => state.operations)
-  const pending = useAnnouncementStore((state) => state.pending)
+export const AnnouncementSelect = () => {
+  const [query, setQuery] = useState('')
+
+  const { selected, announcementList, operations, pending, setSelected } =
+    useAnnouncementStore()
+
+  const filtered = announcementList.filter((item) =>
+    item.title.toLowerCase().includes(query.toLowerCase()),
+  )
+
   return (
-    <Card className="max-lg:hidden col-span-2 flex min-h-0 flex-col overflow-hidden max-lg:col-span-1 !h-fit">
+    <Card className="max-lg:hidden col-span-2 flex min-h-0 flex-col overflow-hidden max-lg:col-span-1 h-fit">
       <div className="flex shrink-0 items-center gap-2 px-4 py-4 text-sm">
         <h2 className="font-semibold">Your announcements</h2>
         <span className="text-xs rounded-md bg-slate-100 text-slate-500 pt-0.5 pr-1.5 pb-0.5 pl-1.5">
@@ -73,4 +65,22 @@ export const AnnouncementSelect: FC<IAnnouncementSelectProps> = ({
       </div>
     </Card>
   )
+}
+
+export function AnnouncementStatusBadge({ status }: { status: string }) {
+  const tone =
+    status === 'published'
+      ? 'success'
+      : status === 'rejected'
+        ? 'danger'
+        : status === 'processing' || status === 'pending'
+          ? 'warning'
+          : 'neutral'
+  const labels: Record<string, string> = {
+    published: 'Published',
+    rejected: 'Rejected',
+    processing: 'Processing',
+    pending: 'Pending',
+  }
+  return <Badge tone={tone}>{labels[status] ?? status}</Badge>
 }

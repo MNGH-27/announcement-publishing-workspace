@@ -1,2 +1,2 @@
 export { AnnouncementWorkspace } from './components/AnnouncementWorkspace'
-export { ScenarioSelect } from './components/ScenarioSelect'
+export { ScenarioSelect } from './components/AnnouncementHeader'

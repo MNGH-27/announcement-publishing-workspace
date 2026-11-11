@@ -1,4 +1,4 @@
 import { createAnnouncementMock } from '../../mocks'
 
-// Share one service client across features. Read publication truth through its API.
+// Share one service client across features
 export const announcementService = createAnnouncementMock()

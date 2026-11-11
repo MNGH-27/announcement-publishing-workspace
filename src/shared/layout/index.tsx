@@ -91,7 +91,7 @@ export function Header({ onOpenMenu, actions }: { onOpenMenu: () => void; action
           <span className="size-1.5 rounded-full bg-emerald-600" />
           Team workspace
         </span>
-        <span className="grid size-8 place-items-center rounded-full bg-brand-50 font-semibold text-brand-600 hidden">
+        <span className="grid size-8 place-items-center rounded-full bg-brand-50 font-semibold text-brand-600">
           CT
         </span>
       </div>

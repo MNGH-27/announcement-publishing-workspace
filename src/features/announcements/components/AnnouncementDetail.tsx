@@ -14,9 +14,7 @@ interface IAnnouncementDetailProps {
 export const AnnouncementDetail: FC<IAnnouncementDetailProps> = ({ announcement }) => {
   const { isLoading, setIsLoading, setError, clearError } = useFeedback()
 
-  const restored = useAnnouncementStore((state) => state.restored)
-  const pending = useAnnouncementStore((state) => state.pending)
-  const operations = useAnnouncementStore((state) => state.operations)
+  const { restored , pending , operations } = useAnnouncementStore()
 
   const latestOperation = findAnnouncementOperation(operations, announcement?.id)
 
@@ -24,8 +22,10 @@ export const AnnouncementDetail: FC<IAnnouncementDetailProps> = ({ announcement 
 
   const SubmitAnnouncement = async () => {
     if (!announcement || isLoading) return
+
     setIsLoading(true)
     clearError()
+
     try {
       await publishAnnouncement(announcement.id)
     } catch (cause) {
@@ -37,9 +37,12 @@ export const AnnouncementDetail: FC<IAnnouncementDetailProps> = ({ announcement 
 
   const checkStatus = async () => {
     const id = (announcement && pending[announcement.id]) ?? latestOperation?.operationId
+
     if (!id || isLoading) return
+
     setIsLoading(true)
     clearError()
+    
     try {
       const operation = await checkOperation(id)
       if (!operation) setError('Operation is not recorded. Safely retry the existing attempt.')

@@ -6,6 +6,7 @@ let keyPromise: Promise<CryptoKey> | undefined
 
 const encode = (bytes: Uint8Array) =>
   btoa(Array.from(bytes, (byte) => String.fromCharCode(byte)).join(''))
+
 const decode = (value: string) => Uint8Array.from(atob(value), (char) => char.charCodeAt(0))
 
 async function getKey() {
@@ -54,6 +55,7 @@ export const encryptedStorage: StateStorage = {
     writes = write
     return write
   },
+
   async removeItem(name) {
     await writes.catch(() => {})
     localStorage.removeItem(name)
